@@ -1,0 +1,258 @@
+<title>Help Lightning AEO Email</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: one centered column; a sticky copy bar over an email-client-style preview card. */
+:root {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --ink: #1b2330;
+  --muted: #5d6878;
+  --line: #d9dee6;
+  --accent: #2563eb;
+  --accent-ink: #ffffff;
+  --ok: #15803d;
+  --font-ui: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161d; --surface: #1b212b; --ink: #e6eaf0; --muted: #9aa5b5; --line: #2c3442;
+    --accent: #5b8cff; --accent-ink: #0b1020; --ok: #4ade80; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1b212b; --ink: #e6eaf0; --muted: #9aa5b5; --line: #2c3442;
+  --accent: #5b8cff; --accent-ink: #0b1020; --ok: #4ade80; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--font-ui); }
+.wrap { max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 0 48px; }
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-block: 14px;
+}
+.bar h1 { font-size: 15px; font-weight: 700; margin: 0; flex: 1 1 220px; }
+.bar p { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); font-weight: 400; }
+button {
+  font: 600 13px var(--font-ui); border-radius: 6px; padding: 9px 14px; cursor: pointer;
+  border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+}
+button.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.status { font-size: 12.5px; color: var(--ok); min-height: 1em; width: 100%; }
+.label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 22px 0 6px; }
+.subject {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; font-size: 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+}
+.subject span { flex: 1 1 200px; min-width: 0; }
+/* The email itself keeps fixed light colors so it pastes into Superhuman looking the same. */
+.email {
+  background: #ffffff; color: #1f2937; border: 1px solid var(--line); border-radius: 8px;
+  padding: 28px clamp(16px, 4vw, 36px); overflow-x: auto;
+}
+#fallback { width: 100%; min-height: 160px; font: 12px ui-monospace, Menlo, monospace; margin-top: 8px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+</style>
+
+<div class="wrap">
+  <div class="bar">
+    <h1>Help Lightning diagnostic email
+      <p>Copy, paste into Superhuman, send. Charts paste as formatted bars.</p>
+    </h1>
+    <button id="copyRich" type="button">Copy email</button>
+    <button id="copyPlain" class="ghost" type="button">Copy as plain text</button>
+    <div class="status" id="status" role="status"></div>
+  </div>
+
+  <div class="label">Subject</div>
+  <div class="subject"><span id="subj"></span><button id="copySubj" class="ghost" type="button">Copy subject</button></div>
+
+  <div class="label">Body</div>
+  <div class="email" id="email"></div>
+  <textarea id="fallback" hidden aria-label="Email text to copy manually"></textarea>
+</div>
+
+<script>
+const SUBJECT = "AEO Diagnostic - Help Lightning";
+const PROSPECT = "Help Lightning";
+const SCALE = 60; // all three charts share a 0-60% scale so they compare honestly
+
+const charts = {
+  overall: {
+    title: "AI VISIBILITY — OVERALL",
+    sub: "288 AI responses · 32 prompts · Oct 4–5, 2026",
+    rows: [["SightCall",23.6],["TeamViewer Frontline",22.2],["Blitzz",13.5],["TechSee",13.2],["XMReality",10.1],["Help Lightning",9.4],["Vuforia Chalk",9.0],["Zoho Lens",7.6],["VSight",5.2],["Librestream",2.4]]
+  },
+  bofu: {
+    title: "AI VISIBILITY — BOTTOM OF FUNNEL",
+    sub: "99 AI responses · 11 buying-intent prompts",
+    rows: [["SightCall",55.6],["TeamViewer Frontline",44.4],["Blitzz",36.4],["TechSee",31.3],["XMReality",25.3],["Help Lightning",22.2],["Vuforia Chalk",22.2],["Zoho Lens",19.2],["VSight",15.2],["Librestream",4.0]]
+  },
+  tofu: {
+    title: "AI VISIBILITY — TOP OF FUNNEL",
+    sub: "90 AI responses · 10 early-journey prompts",
+    rows: [["SightCall",3.3],["TechSee",2.2],["Librestream",1.1],["Help Lightning",0],["TeamViewer Frontline",0],["Blitzz",0],["XMReality",0],["Vuforia Chalk",0],["Zoho Lens",0],["VSight",0]]
+  }
+};
+
+const body = [
+  ["p", "Short answer: you're not AI invisible, but you're well behind where a company with your product should be. Across 288 AI responses to 32 questions your buyers are likely asking AI, Help Lightning appears in 9% of them - sixth out of ten brands, and well behind SightCall (24%) and TeamViewer (22%). So the models know you. The problem is how they know you. Nearly all of your visibility sits at the bottom of the funnel, where you're one name on a crowded shortlist. In the middle of the funnel, where buyers compare approaches and build that shortlist, you drop to 5% against TeamViewer's 20%. At the top of the funnel you're at zero - but so is nearly everyone else on your list. If we move forward, I would recommend focusing on both strengthening your bottom of funnel positioning (I typically work to get my clients to #1 for ready to buy prompts) AND getting Help Lightning to own the top of funnel / discovery stage space - why give your competitors a chance to engage with a prospect first."],
+  ["p", "Here's the overall AI Visibility score for you and the competitive set - the % of prompt responses each brand appeared in:"],
+  ["chart", "overall"],
+  ["p", "For bottom-of-funnel prompts, the ones buyers ask when they're ready to buy, the competition gets sharper - and SightCall is running away with it:"],
+  ["chart", "bofu"],
+  ["p", "You show up in about one in five buying-intent answers. SightCall shows up in more than half, and TeamViewer in 44%."],
+  ["p", "But for up-funnel prompts, the questions buyers ask earlier in their journey, the picture looks completely different:"],
+  ["chart", "tofu"],
+  ["p", "That's ten up-funnel questions across 90 responses - things like \"how do manufacturers capture tribal knowledge from retiring experts?\" and \"what are the best ways to reduce truck rolls?\" - and no brand on your list clears 4%. The models are getting their answers somewhere, though: ptc.com is cited in 20% of those responses, LinkedIn and IBM in 13% each, sightcall.com in 12%. PTC and SightCall are already publishing the educational content AI pulls from; it just hasn't turned into brand recommendations yet. This is open space waiting to be filled by Help Lightning (or one of your competitors)."],
+  ["p", "That split is the whole strategy. On buying questions the models cite vendor sites - sightcall.com and blitzz.co in 29% of responses each, teamviewer.com in 24%. helplightning.com doesn't make the top ten; across the full diagnostic it's cited in just 4% of responses. And two of the most-cited sources that do mention Help Lightning are competitor comparison pages from Blitzz and VSight. Right now, when AI describes you to a buyer, a competitor is often the one who wrote the description."],
+  ["p", "One more cut worth a look. Your remote expert story is getting picked up - 14% on field service prompts, 18% on contact center prompts. But on the manufacturing and inspections & procedures prompts, where your knowledge capture and procedure capabilities should be the answer, you're at zero. TeamViewer leads manufacturing at 14% and Blitzz leads inspections at 16%."],
+  ["p", "One fair warning on timing. Four competitor domains - teamviewer.com, sightcall.com, ptc.com and blitzz.co - now sit inside the ten most-cited sources in your category, which puts this in our higher-difficulty band. Your competitors have a meaningful head start. I'm still confident we can close the gap - but expect closer to 60 days to see real movement. The window is still open, but not forever."],
+  ["p", "If you want to move forward, just reply and I'll get a draft contract over same day. Or happy to jump on a call if you'd rather talk through what this all means first."],
+  ["p", "Cheers,\nWarren"],
+  ["hr"],
+  ["p", "Here's the prompts we used in the diagnostic:"],
+  ["list", "TOP OF FUNNEL — 10", [
+    "What is remote visual assistance and how does it work for field technicians?",
+    "How can augmented reality help a remote expert guide a technician through a repair?",
+    "How do companies improve first-time fix rate in field service?",
+    "What are the best ways to reduce truck rolls for customer support issues?",
+    "How can a call center use live video to solve customer problems without sending a technician?",
+    "How do manufacturers capture tribal knowledge from retiring experts before they leave?",
+    "What is a connected worker platform and why are manufacturers adopting it?",
+    "How can manufacturing plants reduce equipment downtime when the expert is at another site?",
+    "What are digital work instructions and how do they compare to paper SOPs?",
+    "How can companies do remote inspections and audits using video instead of travel?"
+  ]],
+  ["list", "MIDDLE OF FUNNEL — 11", [
+    "What features should I look for in remote expert assistance software for field service?",
+    "Remote visual assistance vs screen sharing tools like TeamViewer: which is better for hands-on equipment repair?",
+    "How do AR remote assistance tools compare to Microsoft Teams or Zoom for supporting field technicians?",
+    "What ROI can a field service organization expect from remote video support software?",
+    "Does remote assistance software work on low bandwidth connections out in the field?",
+    "What security and compliance requirements matter for remote video support in medical device field service?",
+    "How do I evaluate visual customer support software for a contact center?",
+    "Which remote video support tools integrate with Salesforce or ServiceNow for contact centers?",
+    "What should a manufacturer look for in a connected worker or remote collaboration platform?",
+    "How do AI-powered remote assistance tools turn expert support sessions into reusable procedures?",
+    "What's the best way to standardize equipment inspections with photo and video documentation and sign-offs?"
+  ]],
+  ["list", "BOTTOM OF FUNNEL — 11", [
+    "What are the best remote visual assistance software platforms in 2026?",
+    "Best AR remote assistance software for enterprise field service teams",
+    "Top remote expert support software for medical device field service engineers",
+    "What are the best alternatives to Microsoft Dynamics 365 Remote Assist?",
+    "Best video support software to reduce truck rolls for a customer service contact center",
+    "Best visual customer support platforms for appliance and equipment manufacturers",
+    "What are the best alternatives to SightCall and TechSee for remote video assistance?",
+    "Best remote assistance software for manufacturing companies with plants in multiple locations",
+    "Best connected worker platforms with AI knowledge capture for manufacturing",
+    "Best remote video inspection software for insurance claims and collision repair estimates",
+    "Best software for creating step-by-step digital procedures from equipment manuals and SOPs"
+  ]],
+  ["list", "And here's the brands we benchmarked against:", [
+    "Help Lightning — helplightning.com",
+    "SightCall — sightcall.com",
+    "TeamViewer Frontline — teamviewer.com",
+    "Blitzz — blitzz.co",
+    "TechSee — techsee.me",
+    "XMReality — xmreality.com",
+    "Vuforia Chalk (PTC) — ptc.com",
+    "Zoho Lens — zoho.com",
+    "VSight — vsight.io",
+    "Librestream (Onsight) — librestream.com"
+  ]]
+];
+
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const F = "font-family:Arial,Helvetica,sans-serif;";
+
+function chartHTML(c) {
+  const rows = c.rows.map(([name, v]) => {
+    const own = name === PROSPECT;
+    const color = own ? "#2563EB" : "#64748B";
+    const w = v > 0 ? (v / SCALE * 100).toFixed(1) + "%" : "2px";
+    return `<tr>
+      <td style="${F}width:150px;padding:4px 10px 4px 0;text-align:right;font-size:13px;white-space:nowrap;color:${own ? "#2563EB" : "#334155"};font-weight:${own ? 700 : 400};">${esc(name)}</td>
+      <td style="padding:4px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;"><tr>
+        <td style="width:${w};height:16px;background:${color};border-radius:3px;font-size:0;line-height:0;">&nbsp;</td><td style="font-size:0;line-height:0;">&nbsp;</td>
+      </tr></table></td>
+      <td style="${F}width:52px;padding:4px 0 4px 10px;font-size:12px;color:#334155;white-space:nowrap;">${v.toFixed(1)}%</td>
+    </tr>`;
+  }).join("");
+  return `<div style="${F}border:1px solid #E2E8F0;border-radius:12px;padding:20px 22px;margin:14px 0 18px;max-width:620px;background:#ffffff;">
+    <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#64748B;font-weight:700;">${esc(c.title)}</div>
+    <div style="font-size:11px;color:#94A3B8;margin:2px 0 12px;">${esc(c.sub)}</div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">${rows}</table>
+    <div style="font-size:11px;color:#64748B;margin-top:10px;"><span style="color:#2563EB;">■</span> Help Lightning &nbsp; <span style="color:#64748B;">■</span> Competitors &nbsp;·&nbsp; scale 0–60%</div>
+  </div>`;
+}
+
+function chartText(c) {
+  const lines = c.rows.map(([n, v]) => `${n.padEnd(22, " ")}${v.toFixed(1)}%`);
+  return [c.title, c.sub, ...lines].join("\n");
+}
+
+function renderHTML() {
+  const P = `${F}font-size:14.5px;line-height:1.6;color:#1f2937;margin:0 0 14px;max-width:640px;`;
+  return body.map(b => {
+    if (b[0] === "p") return `<p style="${P}">${esc(b[1]).replace(/\n/g, "<br>")}</p>`;
+    if (b[0] === "chart") return chartHTML(charts[b[1]]);
+    if (b[0] === "hr") return `<hr style="border:0;border-top:1px solid #E2E8F0;margin:24px 0;">`;
+    if (b[0] === "list") return `<p style="${P}margin-bottom:4px;font-weight:700;">${esc(b[1])}</p><ul style="${F}font-size:13.5px;line-height:1.55;color:#374151;margin:0 0 16px;padding-left:20px;">${b[2].map(i => `<li>${esc(i)}</li>`).join("")}</ul>`;
+    return "";
+  }).join("");
+}
+
+function renderText() {
+  return body.map(b => {
+    if (b[0] === "p") return b[1];
+    if (b[0] === "chart") return chartText(charts[b[1]]);
+    if (b[0] === "hr") return "—";
+    if (b[0] === "list") return [b[1], ...b[2]].join("\n");
+    return "";
+  }).join("\n\n");
+}
+
+const emailEl = document.getElementById("email");
+emailEl.innerHTML = renderHTML();
+document.getElementById("subj").textContent = SUBJECT;
+
+const status = document.getElementById("status");
+const fallback = document.getElementById("fallback");
+function say(msg) { status.textContent = msg; clearTimeout(say.t); say.t = setTimeout(() => status.textContent = "", 4000); }
+function manual(text, why) {
+  fallback.hidden = false; fallback.value = text; fallback.focus(); fallback.select();
+  say(why + " The text is selected below. Press Ctrl/Cmd+C to copy.");
+}
+
+document.getElementById("copyRich").addEventListener("click", () => {
+  const html = emailEl.innerHTML, text = renderText();
+  try {
+    const item = new ClipboardItem({
+      "text/html": new Blob([html], { type: "text/html" }),
+      "text/plain": new Blob([text], { type: "text/plain" })
+    });
+    navigator.clipboard.write([item]).then(
+      () => say("Copied with formatted charts. Paste into the Superhuman body."),
+      () => copyViaSelection()
+    );
+  } catch (e) { copyViaSelection(); }
+});
+
+function copyViaSelection() {
+  try {
+    const r = document.createRange(); r.selectNodeContents(emailEl);
+    const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    if (document.execCommand("copy")) { s.removeAllRanges(); say("Copied with formatted charts. Paste into the Superhuman body."); return; }
+  } catch (e) {}
+  manual(renderText(), "This browser blocked rich copy.");
+}
+
+function copyPlain(text, okMsg) {
+  if (!navigator.clipboard) return manual(text, "Clipboard is unavailable here.");
+  navigator.clipboard.writeText(text).then(() => say(okMsg), () => manual(text, "Clipboard access was refused."));
+}
+document.getElementById("copyPlain").addEventListener("click", () => copyPlain(renderText(), "Copied as plain text."));
+document.getElementById("copySubj").addEventListener("click", () => copyPlain(SUBJECT, "Subject copied."));
+</script>
