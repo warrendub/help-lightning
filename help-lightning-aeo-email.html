@@ -96,72 +96,34 @@ const charts = {
 };
 
 const body = [
-  ["p", "Short answer: you're not AI invisible, but you're well behind where a company with your product should be. Across 288 AI responses to 32 questions your buyers are likely asking AI, Help Lightning appears in 9% of them - sixth out of ten brands, and well behind SightCall (24%) and TeamViewer (22%). So the models know you. The problem is how they know you. Nearly all of your visibility sits at the bottom of the funnel, where you're one name on a crowded shortlist. In the middle of the funnel, where buyers compare approaches and build that shortlist, you drop to 5% against TeamViewer's 20%. At the top of the funnel you're at zero - but so is nearly everyone else on your list. If we move forward, I would recommend focusing on both strengthening your bottom of funnel positioning (I typically work to get my clients to #1 for ready to buy prompts) AND getting Help Lightning to own the top of funnel / discovery stage space - why give your competitors a chance to engage with a prospect first."],
+  ["p", "Short answer: you're not AI invisible, but you're not where you should be. Across 288 AI responses to 32 questions your buyers are likely asking AI, Help Lightning appears in 9% of them - sixth out of ten brands, behind SightCall (24%) and TeamViewer (22%). Most of your visibility sits at the bottom of the funnel, and at the top of the funnel you're at zero. The good news: so is almost everyone else."],
   ["p", "Here's the overall AI Visibility score for you and the competitive set - the % of prompt responses each brand appeared in:"],
   ["chart", "overall"],
-  ["p", "For bottom-of-funnel prompts, the ones buyers ask when they're ready to buy, the competition gets sharper - and SightCall is running away with it:"],
+  ["p", "On bottom-of-funnel prompts, the ones buyers ask when they're ready to buy, you show up in about one in five answers. SightCall shows up in more than half:"],
   ["chart", "bofu"],
-  ["p", "You show up in about one in five buying-intent answers. SightCall shows up in more than half, and TeamViewer in 44%."],
-  ["p", "But for up-funnel prompts, the questions buyers ask earlier in their journey, the picture looks completely different:"],
+  ["p", "On up-funnel prompts, the questions buyers ask earlier in their journey, nobody owns the conversation yet:"],
   ["chart", "tofu"],
-  ["p", "That's ten up-funnel questions across 90 responses - things like \"how do manufacturers capture tribal knowledge from retiring experts?\" and \"what are the best ways to reduce truck rolls?\" - and no brand on your list clears 4%. The models are getting their answers somewhere, though: ptc.com is cited in 20% of those responses, LinkedIn and IBM in 13% each, sightcall.com in 12%. PTC and SightCall are already publishing the educational content AI pulls from; it just hasn't turned into brand recommendations yet. This is open space waiting to be filled by Help Lightning (or one of your competitors)."],
-  ["p", "That split is the whole strategy. On buying questions the models cite vendor sites - sightcall.com and blitzz.co in 29% of responses each, teamviewer.com in 24%. helplightning.com doesn't make the top ten; across the full diagnostic it's cited in just 4% of responses. And two of the most-cited sources that do mention Help Lightning are competitor comparison pages from Blitzz and VSight. Right now, when AI describes you to a buyer, a competitor is often the one who wrote the description."],
-  ["p", "One more cut worth a look. Your remote expert story is getting picked up - 14% on field service prompts, 18% on contact center prompts. But on the manufacturing and inspections & procedures prompts, where your knowledge capture and procedure capabilities should be the answer, you're at zero. TeamViewer leads manufacturing at 14% and Blitzz leads inspections at 16%."],
-  ["p", "One fair warning on timing. Four competitor domains - teamviewer.com, sightcall.com, ptc.com and blitzz.co - now sit inside the ten most-cited sources in your category, which puts this in our higher-difficulty band. Your competitors have a meaningful head start. I'm still confident we can close the gap - but expect closer to 60 days to see real movement. The window is still open, but not forever."],
-  ["p", "If you want to move forward, just reply and I'll get a draft contract over same day. Or happy to jump on a call if you'd rather talk through what this all means first."],
+  ["p", "That's open space. And on buying questions the models mostly cite your competitors' sites. helplightning.com is cited in just 4% of responses, and some of what AI says about you comes from Blitzz and VSight comparison pages."],
+  ["p", "Here's where I'd focus:"],
+  ["bullets", [
+    ["Own the early questions.", "Publish the answers AI is looking for on topics like reducing truck rolls, improving first-time fix rate and capturing tribal knowledge from retiring experts, so Help Lightning is the name buyers see before they have a shortlist."],
+    ["Tell your own comparison story.", "Build pages for the head-to-head questions buyers ask, like alternatives to SightCall or to Dynamics 365 Remote Assist, so you describe Help Lightning instead of Blitzz doing it for you."],
+    ["Make helplightning.com the source.", "Restructure your key product and use-case pages so the models cite you directly. I typically work to get my clients to #1 for ready-to-buy prompts."],
+    ["Close the gaps in manufacturing and inspections.", "You're at zero on those prompts today, and they're a natural fit for your knowledge capture and procedure capabilities."]
+  ]],
+  ["p", "One fair warning on timing: four competitor sites already sit in the ten most-cited sources in your category, so expect closer to 60 days to see real movement. The window is still open, but not forever."],
+  ["p", "If you want to move forward, just reply and I'll get a draft contract over same day. Or happy to jump on a call if you'd rather walk through it first."],
   ["p", "Cheers,\nWarren"],
   ["hr"],
-  ["p", "Here's the prompts we used in the diagnostic:"],
-  ["list", "TOP OF FUNNEL — 10", [
-    "What is remote visual assistance and how does it work for field technicians?",
-    "How can augmented reality help a remote expert guide a technician through a repair?",
+  ["list", "A few of the 32 prompts we tested:", [
     "How do companies improve first-time fix rate in field service?",
-    "What are the best ways to reduce truck rolls for customer support issues?",
-    "How can a call center use live video to solve customer problems without sending a technician?",
     "How do manufacturers capture tribal knowledge from retiring experts before they leave?",
-    "What is a connected worker platform and why are manufacturers adopting it?",
-    "How can manufacturing plants reduce equipment downtime when the expert is at another site?",
-    "What are digital work instructions and how do they compare to paper SOPs?",
-    "How can companies do remote inspections and audits using video instead of travel?"
-  ]],
-  ["list", "MIDDLE OF FUNNEL — 11", [
     "What features should I look for in remote expert assistance software for field service?",
-    "Remote visual assistance vs screen sharing tools like TeamViewer: which is better for hands-on equipment repair?",
-    "How do AR remote assistance tools compare to Microsoft Teams or Zoom for supporting field technicians?",
-    "What ROI can a field service organization expect from remote video support software?",
-    "Does remote assistance software work on low bandwidth connections out in the field?",
-    "What security and compliance requirements matter for remote video support in medical device field service?",
     "How do I evaluate visual customer support software for a contact center?",
-    "Which remote video support tools integrate with Salesforce or ServiceNow for contact centers?",
-    "What should a manufacturer look for in a connected worker or remote collaboration platform?",
-    "How do AI-powered remote assistance tools turn expert support sessions into reusable procedures?",
-    "What's the best way to standardize equipment inspections with photo and video documentation and sign-offs?"
-  ]],
-  ["list", "BOTTOM OF FUNNEL — 11", [
     "What are the best remote visual assistance software platforms in 2026?",
-    "Best AR remote assistance software for enterprise field service teams",
-    "Top remote expert support software for medical device field service engineers",
-    "What are the best alternatives to Microsoft Dynamics 365 Remote Assist?",
-    "Best video support software to reduce truck rolls for a customer service contact center",
-    "Best visual customer support platforms for appliance and equipment manufacturers",
-    "What are the best alternatives to SightCall and TechSee for remote video assistance?",
-    "Best remote assistance software for manufacturing companies with plants in multiple locations",
-    "Best connected worker platforms with AI knowledge capture for manufacturing",
-    "Best remote video inspection software for insurance claims and collision repair estimates",
-    "Best software for creating step-by-step digital procedures from equipment manuals and SOPs"
+    "What are the best alternatives to Microsoft Dynamics 365 Remote Assist?"
   ]],
-  ["list", "And here's the brands we benchmarked against:", [
-    "Help Lightning — helplightning.com",
-    "SightCall — sightcall.com",
-    "TeamViewer Frontline — teamviewer.com",
-    "Blitzz — blitzz.co",
-    "TechSee — techsee.me",
-    "XMReality — xmreality.com",
-    "Vuforia Chalk (PTC) — ptc.com",
-    "Zoho Lens — zoho.com",
-    "VSight — vsight.io",
-    "Librestream (Onsight) — librestream.com"
-  ]]
+  ["p", "Brands we benchmarked against: SightCall, TeamViewer Frontline, Blitzz, TechSee, XMReality, Vuforia Chalk (PTC), Zoho Lens, VSight and Librestream."]
 ];
 
 const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -199,6 +161,7 @@ function renderHTML() {
     if (b[0] === "p") return `<p style="${P}">${esc(b[1]).replace(/\n/g, "<br>")}</p>`;
     if (b[0] === "chart") return chartHTML(charts[b[1]]);
     if (b[0] === "hr") return `<hr style="border:0;border-top:1px solid #E2E8F0;margin:24px 0;">`;
+    if (b[0] === "bullets") return `<ul style="${F}font-size:14.5px;line-height:1.6;color:#1f2937;margin:0 0 14px;padding-left:20px;max-width:620px;">${b[1].map(([h, t]) => `<li style="margin-bottom:8px;"><strong>${esc(h)}</strong> ${esc(t)}</li>`).join("")}</ul>`;
     if (b[0] === "list") return `<p style="${P}margin-bottom:4px;font-weight:700;">${esc(b[1])}</p><ul style="${F}font-size:13.5px;line-height:1.55;color:#374151;margin:0 0 16px;padding-left:20px;">${b[2].map(i => `<li>${esc(i)}</li>`).join("")}</ul>`;
     return "";
   }).join("");
@@ -209,7 +172,8 @@ function renderText() {
     if (b[0] === "p") return b[1];
     if (b[0] === "chart") return chartText(charts[b[1]]);
     if (b[0] === "hr") return "—";
-    if (b[0] === "list") return [b[1], ...b[2]].join("\n");
+    if (b[0] === "bullets") return b[1].map(([h, t]) => `- ${h} ${t}`).join("\n\n");
+    if (b[0] === "list") return [b[1], ...b[2].map(x => `- ${x}`)].join("\n");
     return "";
   }).join("\n\n");
 }
